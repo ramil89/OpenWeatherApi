@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/OpenWeather.All/.vs
+/OpenWeather.All/OpenWeather.Api/bin/Debug/netcoreapp2.2
+/OpenWeather.All/OpenWeather.Api/obj
