@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OpenWeather.Client.Clients;
+using OpenWeather.Client.Models;
 
 namespace OpenWeather.Api.Controllers
 {
@@ -11,10 +13,22 @@ namespace OpenWeather.Api.Controllers
     [ApiController]
     public class WeatherController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IForecastClient _forecastClient;
+
+        public WeatherController(IForecastClient forecastClient)
         {
-            return new string[] { "value1", "value2" };
+            _forecastClient = forecastClient;
+        }
+
+        [HttpGet("forecast")]
+        public async Task<ForecastResponse> Get([FromQuery(Name ="q")]string cityName) 
+        {
+            var result = await _forecastClient.GetByName(cityName);
+
+            if (result.StatusCode != 200)
+                throw new Exception($"Invalid request {result.StatusCode}");
+
+            return result;
         }
 
         [HttpGet("{id}", Name = "Get")]
