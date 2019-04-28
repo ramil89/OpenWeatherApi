@@ -27,12 +27,14 @@ namespace OpenWeather.Api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddSingleton<IForecastClient, ForecastClient>((f) => 
+            services.AddSingleton<IForecastClient, ForecastClient>((f) =>
             {
                 var settings = Configuration.GetSection("OpenWeatherMap").Get<OpenWeatherApiSettings>();
 
                 return new ForecastClient(settings);
             });
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +44,8 @@ namespace OpenWeather.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseMvc();
         }

@@ -1,0 +1,28 @@
+<h1>Weather forecast</h1>
+
+<div class="col-md-4">
+  <div class="input-group">
+    <input type="text" placeholder="city name" [(ngModel)]="cityName" class="form-control" />
+    <span class="input-group-btn">
+      <input type="button" value="Load forecast" class="btn btn-info" (click)="onLoadForecastClick()" />
+    </span>
+  </div>
+</div>
+<!--<table class='table table-striped' *ngIf="forecasts">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Temp. (C)</th>
+      <th>Temp. (F)</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let forecast of forecasts">
+      <td>{{ forecast.dateFormatted }}</td>
+      <td>{{ forecast.temperatureC }}</td>
+      <td>{{ forecast.temperatureF }}</td>
+      <td>{{ forecast.summary }}</td>
+    </tr>
+  </tbody>
+</table>-->
