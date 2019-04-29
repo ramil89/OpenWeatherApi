@@ -12,7 +12,7 @@ export class ForecastService {
   getForecast(cityName: string) {
     var promise = new Promise<WeatherData>((resolve, reject) => {
 
-      return this.http.get<WeatherData[]>(environment.ApiUrl + "/api/weather/forecast?q=" + cityName)
+      return this.http.get<WeatherData[]>(environment.ApiUrl + "/api/weather/forecast?q=" + cityName + "&units=metric")
         .toPromise().then((response) => {
           console.log(response);
           resolve(response);

@@ -22,6 +22,9 @@ export class ForecastComponent {
     if (typeof this.cityName !== 'undefined' && this.cityName) {
       this.forecastService.getForecast(this.cityName).then((response) => {
         this.forecasts = response;
+      })
+        .catch((response) => {
+          console.log(response);
       });
     }
   }
