@@ -21,7 +21,14 @@ namespace OpenWeather.Api.Controllers
             _forecastClient = forecastClient;
         }
 
+        /// <summary>
+        /// Retrieves forecast by provided city name
+        /// </summary>
+        /// <param name="cityName">city name</param>
+        /// <param name="metric">Metrics: Internal, Metric or Imperial</param>
+        /// <returns></returns>
         [HttpGet("forecast")]
+        [ProducesResponseType(typeof(ForecastResponse), 200)]
         public async Task<ForecastResponse> Get([FromQuery(Name ="q")]string cityName, [FromQuery(Name = "units")]MetricSystem metric) 
         {
             var result = await _forecastClient.GetByName(cityName, metric);
@@ -32,10 +39,14 @@ namespace OpenWeather.Api.Controllers
             return result;
         }
 
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        /// <summary>
+        /// Default startup address.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public string Get()
         {
-            return "value";
+            return "Forecast Api";
         }
     }
 }
