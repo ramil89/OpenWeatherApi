@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  openweather.api:
+    image: ramil89/openweather.api:latest
+    restart: always
+    build:
+      context: .
+      dockerfile: OpenWeather.Api/Dockerfile
+  openweather.web:
+    image: ramil89/openweather.web:latest
+    build: 
+      context: .
+      dockerfile: OpenWeather.Web/Dockerfile
