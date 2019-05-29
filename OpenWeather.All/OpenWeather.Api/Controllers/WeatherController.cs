@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenWeather.Client.Clients;
 using OpenWeather.Client.Common;
 using OpenWeather.Client.Models;
+using OpenWeather.Client.Requests;
 
 namespace OpenWeather.Api.Controllers
 {
@@ -16,9 +17,12 @@ namespace OpenWeather.Api.Controllers
     {
         private readonly IForecastClient _forecastClient;
 
-        public WeatherController(IForecastClient forecastClient)
+        private readonly IRequestFactory _requestFactory;
+
+        public WeatherController(IForecastClient forecastClient, IRequestFactory requestFactory)
         {
             _forecastClient = forecastClient;
+            _requestFactory = requestFactory;
         }
 
         /// <summary>
@@ -31,7 +35,7 @@ namespace OpenWeather.Api.Controllers
         [ProducesResponseType(typeof(ForecastResponse), 200)]
         public async Task<ForecastResponse> Get([FromQuery(Name ="q")]string cityName, [FromQuery(Name = "units")]MetricSystem metric) 
         {
-            var result = await _forecastClient.GetByName(cityName, metric);
+            var result = await _forecastClient.Get(_requestFactory.GetRequest(cityName), metric);
 
             if (result.StatusCode != 200)
                 throw new Exception($"Invalid request {result.StatusCode}");

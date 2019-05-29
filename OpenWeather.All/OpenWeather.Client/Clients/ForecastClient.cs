@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using OpenWeather.Client.Common;
 using OpenWeather.Client.Models;
+using OpenWeather.Client.Requests;
 
 namespace OpenWeather.Client.Clients
 {
@@ -21,14 +22,9 @@ namespace OpenWeather.Client.Clients
             _httpClient = new HttpClient();
         }
         
-        public async Task<ForecastResponse> GetById(int cityId, MetricSystem metric = MetricSystem.Internal)
+        public async Task<ForecastResponse> Get(IRequest request, MetricSystem metric = MetricSystem.Internal)
         {
-            return await GetForecast($"{_settings.ApiUrl}/forecast?id={cityId}&units={metric}&appid={_settings.ApiKey}&mode=json");
-        }
-
-        public async Task<ForecastResponse> GetByName(string cityName, MetricSystem metric = MetricSystem.Internal)
-        {
-            return await GetForecast($"{_settings.ApiUrl}/forecast?q={cityName}&units={metric}&appid={_settings.ApiKey}&mode=json");
+            return await GetForecast($"{_settings.ApiUrl}/forecast?{request.GetQueryString()}&units={metric}&appid={_settings.ApiKey}&mode=json");
         }
 
         private async Task<ForecastResponse> GetForecast(string url)
