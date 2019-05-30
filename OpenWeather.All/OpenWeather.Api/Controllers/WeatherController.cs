@@ -33,12 +33,21 @@ namespace OpenWeather.Api.Controllers
         /// <returns></returns>
         [HttpGet("forecast")]
         [ProducesResponseType(typeof(ForecastResponse), 200)]
-        public async Task<ForecastResponse> Get([FromQuery(Name ="q")]string cityName, [FromQuery(Name = "units")]MetricSystem metric) 
+        public async Task<ForecastResponse> Get([FromQuery(Name = "q")]string cityName, [FromQuery(Name = "units")]MetricSystem metric)
         {
             var result = await _forecastClient.Get(_requestFactory.GetRequest(cityName), metric);
 
             if (result.StatusCode != 200)
                 throw new Exception($"Invalid request {result.StatusCode}");
+
+            return result;
+        }
+
+        [HttpGet("forecast/zip/{zip}/code/{code}")]
+        [ProducesResponseType(typeof(ForecastResponse), 200)]
+        public async Task<ForecastResponse> Get([FromRoute(Name = "zip")]string zipCode, [FromRoute]string code, [FromQuery(Name = "units")]MetricSystem metric)
+        {
+            var result = await _forecastClient.Get(_requestFactory.GetRequest(zipCode, code), metric);
 
             return result;
         }
