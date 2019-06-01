@@ -1,7 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WeatherData } from '../models/weather-data';
 import { ForecastService } from '../services/forecast.service';
+import { timer, Subject, Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'forecast-data',
@@ -11,20 +12,35 @@ export class ForecastComponent {
 
   public forecasts: WeatherData;
 
-  public cityName: string;
+  public cityTxt: string;
+
+  public city: string;
+
+  public syncDate: Date;
+
+  private timerSubscription: Subscription;
 
   constructor(private forecastService: ForecastService) {
 
   }
 
   onLoadForecastClick() {
-    console.log(this.cityName);
-    if (typeof this.cityName !== 'undefined' && this.cityName) {
-      this.forecastService.getForecast(this.cityName).then((response) => {
-        this.forecasts = response;
-      })
-        .catch((response) => {
-          console.log(response);
+    this.city = this.cityTxt;
+
+    if (this.city) {
+      if (this.timerSubscription)
+        this.timerSubscription.unsubscribe();
+
+      this.timerSubscription = timer(0, 30000).subscribe(val => {
+        console.log(val, '-');
+        this.forecastService.getForecast(this.city).then((response) => {
+          this.forecasts = response;
+          this.syncDate = new Date();
+        })
+          .catch((response) => {
+            this.forecasts = [];
+            console.log(response);
+          });
       });
     }
   }
